@@ -26,7 +26,8 @@ class Game:
     def win(self):
         possible_wins = [
             self.validate_horizon(),
-            self.validate_vertical()
+            self.validate_vertical(),
+            self.validate_diagonal()
         ]
         if any(possible_wins):
             return True
@@ -41,9 +42,9 @@ class Game:
         vertical = self.board.get_vertical
         return self.validate_list(vertical)
 
-    def validate_horizon1(self):
-        horizon1 = self.board.get_horizon()
-        return self.validate_list(horizon1)
+    def validate_diagonal(self):
+        diagonal = self.board.get_diagonal
+        return self.validate_list(diagonal)
 
     def validate_list(self, array):
         seq = 0

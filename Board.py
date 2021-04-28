@@ -15,9 +15,9 @@ class Board:
             self.__board.append([])
             for column in range(0, columns):
                 self.__board[row].append(None)
-        self.__board[2][3] = True
-        self.__board[3][2] = True
-        self.__board[4][1] = True
+        self.__board[1][3] = True
+        self.__board[2][2] = True
+        self.__board[3][1] = True
 
     def __str__(self):
         text = ''
@@ -83,15 +83,16 @@ class Board:
         return [self.__board[x][self.__last_item] for x in range(6)]
 
     @property
-    def get_horizon(self):
-        return []
+    def get_diagonal(self):
         # 5-0 > 4-1 > 3-2 > 2-3 > 1-4 > 0-5
         result = []
-        row = 0
-        items = self.__last_item
-        while row != 5:
+        row = self.__last_row     # 5
+        items = self.__last_item  # 0
+        while row != 0:
+            if items == 7:
+                break
             result.append(self.__board[row][items])
-            row += 1
+            row -= 1
             items += 1
         return result
 
