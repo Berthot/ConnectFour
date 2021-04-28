@@ -4,15 +4,20 @@ class Board:
         self.__board = []
         self._columns = 0
         self.lines = 0
+        self.__last_row = -1
+        self.__last_item = -1
+        # self.__player = True  # True player1[K] False player2[J]
 
-    def create_new_board(self, columns=7, lines=6):
+    def create_new_board(self, columns=7, rows=6):
         self._columns = columns
-        self.lines = lines
-        for line in range(0, lines):
+        self.lines = rows
+        for row in range(0, rows):
             self.__board.append([])
             for column in range(0, columns):
-                self.__board[line].append('-')
-        self.__board[5][0] = 'J'
+                self.__board[row].append(None)
+        self.__board[2][3] = True
+        self.__board[3][2] = True
+        self.__board[4][1] = True
 
     def __str__(self):
         text = ''
@@ -23,36 +28,72 @@ class Board:
             first_line = True
             acc += 1
             for item in i:
+                if item is None:
+                    name = '-'
+                else:
+                    name = 'K' if item else 'J'
                 if first_line:
-                    text += f"{acc} | {item} | "
+                    text += f"{acc} | {name} | "
                     first_line = False
                     continue
-                text += f"{item} | "
+                text += f"{name} | "
             text += '\n'
 
         return text
 
-    def set_value(self, line, column, value):
-        self.__board[line][column] = value
+    def __set_value(self, x, y, value):
+        self.__board[x][y] = value
+        print(f'{value} [{x}] [{y}]')
 
-    def set_new_ball(self, position: int, player: str):
+    def value_can_be_set(self, position: int, player: bool):
         pos = position - 1
-        column = [x[pos] for x in self.__board if x[pos] == '-']
+        column = [x[pos] for x in self.__board if x[pos] is None]
         if self.__line_full(column):
             print("valor not available")
             return False
-        self.set_value(len(column) - 1, pos, player)
+        self.__set_value(len(column) - 1, pos, player)
+        self.__last_row = len(column) - 1
+        self.__last_item = pos
+
         return True
 
+    def get_position(self, x: int, y: int):
+        try:
+            return self.__board[x][y]
+        except IndexError:
+            return None
+
+    @property
     def board_full(self):
         return all([self.__line_full(x) for x in self.__board])
 
     @staticmethod
     def __line_full(line: list):
-        return all([x != '-' for x in line])
+        return all([x is not None for x in line])
 
     def get_board(self):
         return [*self.__board]
+
+    @property
+    def get_horizon(self):
+        return self.__board[self.__last_row]
+
+    @property
+    def get_vertical(self):
+        return [self.__board[x][self.__last_item] for x in range(6)]
+
+    @property
+    def get_horizon(self):
+        return []
+        # 5-0 > 4-1 > 3-2 > 2-3 > 1-4 > 0-5
+        result = []
+        row = 0
+        items = self.__last_item
+        while row != 5:
+            result.append(self.__board[row][items])
+            row += 1
+            items += 1
+        return result
 
 
 if __name__ == '__main__':
@@ -60,7 +101,7 @@ if __name__ == '__main__':
 
     board.create_new_board()
 
-    board.set_new_ball(1, 'K')
+    # board.value_can_be_set(1, 'K')
 
     # print(board.board_full())
 
