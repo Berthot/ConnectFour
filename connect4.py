@@ -1,4 +1,3 @@
-import numpy as np
 import functionConnect4 as fc
 
 
