@@ -1,7 +1,3 @@
-import numpy as np
-import functionConnect4 as fc
-import pygame
-
 
 def arrowhead(n):
     return n * (490 / 7) - 62
