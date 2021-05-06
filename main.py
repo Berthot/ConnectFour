@@ -4,6 +4,7 @@ import util
 import movements
 import pygame
 import sys
+import minimax
 
 winner = False
 player = 1
@@ -60,6 +61,10 @@ def place_disc():
         util.write_two(board, coordinate)
         squares.append(paint_square(movements.arrowhead(arrow_position), movements.grid_space(coordinate[1]), player))
         player = 1
+    legal = minimax.legal_move(board)
+    list_all = minimax.write_all(legal,minimax.all_walk(minimax.legal_move(board)))
+    print(legal)
+    print(list_all)
 
 
 if __name__ == '__main__':
